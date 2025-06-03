@@ -13,6 +13,7 @@
             --light: #f5f9ff;
             --dark: #1a237e;
             --success: #43a047;
+            --whatsapp: #25D366;
         }
         
         * {
@@ -165,6 +166,15 @@
             background: #ff8f00;
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .whatsapp-btn {
+            background: var(--whatsapp);
+            margin-left: 15px;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
         }
         
         /* Features Section */
@@ -337,7 +347,7 @@
             color: var(--dark);
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -456,6 +466,124 @@
             border-top: 1px solid rgba(255,255,255,0.1);
         }
         
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+        
+        .modal h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--whatsapp);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+        
+        .whatsapp-float i {
+            color: white;
+            font-size: 2rem;
+        }
+        
+        /* Operator Cards */
+        .operator-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .operator-card:hover, .operator-card.selected {
+            border-color: var(--primary);
+            background: #e3f2fd;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .operator-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .operator-info h4 {
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .operator-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
         /* Responsive */
         @media (max-width: 992px) {
             .booking-container {
@@ -480,6 +608,10 @@
             
             .form-row {
                 grid-template-columns: 1fr;
+            }
+            
+            .hero .btn {
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -514,6 +646,9 @@
             <h2 id="hero-title">Tiket Fastboat ke Pulau Gili</h2>
             <p id="hero-subtitle">Perjalanan cepat, aman, dan nyaman ke Gili Trawangan, Gili Meno, dan Gili Air</p>
             <a href="#booking" class="btn" id="hero-button">Pesan Sekarang</a>
+            <a href="https://wa.me/62816247213" target="_blank" class="btn whatsapp-btn" id="whatsapp-button">
+                <i class="fab fa-whatsapp"></i> Chat via WhatsApp
+            </a>
         </div>
     </section>
 
@@ -654,6 +789,57 @@
                                 <option value="padangbai-gili-air">Padangbai → Gili Air</option>
                             </select>
                         </div>
+                        
+                        <!-- Operator Selection -->
+                        <div class="form-group">
+                            <label id="operator-label">Pilih Operator Fastboat</label>
+                            <div class="operator-list">
+                                <div class="operator-card" data-operator="wijaya-perkasa">
+                                    <div class="operator-logo">WP</div>
+                                    <div class="operator-info">
+                                        <h4>Wijaya Perkasa Fastboat</h4>
+                                        <p>Kapasitas: 150 orang | Kecepatan: 30 knot</p>
+                                    </div>
+                                </div>
+                                <div class="operator-card" data-operator="ekajaya">
+                                    <div class="operator-logo">EJ</div>
+                                    <div class="operator-info">
+                                        <h4>Ekajaya Fastboat</h4>
+                                        <p>Kapasitas: 120 orang | Kecepatan: 32 knot</p>
+                                    </div>
+                                </div>
+                                <div class="operator-card" data-operator="ostina">
+                                    <div class="operator-logo">OS</div>
+                                    <div class="operator-info">
+                                        <h4>Ostina Fastboat</h4>
+                                        <p>Kapasitas: 100 orang | Kecepatan: 28 knot</p>
+                                    </div>
+                                </div>
+                                <div class="operator-card" data-operator="golden-queen">
+                                    <div class="operator-logo">GQ</div>
+                                    <div class="operator-info">
+                                        <h4>Golden Queen Fastboat</h4>
+                                        <p>Kapasitas: 130 orang | Kecepatan: 31 knot</p>
+                                    </div>
+                                </div>
+                                <div class="operator-card" data-operator="semaya-one">
+                                    <div class="operator-logo">SO</div>
+                                    <div class="operator-info">
+                                        <h4>Semaya One Fastboat</h4>
+                                        <p>Kapasitas: 110 orang | Kecepatan: 29 knot</p>
+                                    </div>
+                                </div>
+                                <div class="operator-card" data-operator="dprabu">
+                                    <div class="operator-logo">DP</div>
+                                    <div class="operator-info">
+                                        <h4>D'Prabu Fastboat</h4>
+                                        <p>Kapasitas: 140 orang | Kecepatan: 33 knot</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="selected-operator" required>
+                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="adults" id="adults-label">Dewasa (12+ tahun)</label>
@@ -692,6 +878,9 @@
                     <div class="summary-item">
                         <p id="summary-note">* Harga termasuk PPN 10%</p>
                     </div>
+                    <div class="summary-item">
+                        <p><i class="fab fa-whatsapp"></i> Konfirmasi pemesanan via WhatsApp: <strong>+62 816-2472-13</strong></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -708,7 +897,7 @@
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://wa.me/62816247213" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -725,8 +914,9 @@
                     <h3 id="footer-contact">Kontak Kami</h3>
                     <ul>
                         <li><i class="fas fa-map-marker-alt"></i> <span id="address">Pelabuhan Padangbai, Bali</span></li>
-                        <li><i class="fas fa-phone"></i> <span id="phone-footer">+62 361 123456</span></li>
-                        <li><i class="fas fa-envelope"></i> <span id="email-footer">info@padangbaigilifastboat.com</span></li>
+                        <li><i class="fas fa-phone"></i> <span id="phone-footer">+62816247213</span></li>
+                        <li><i class="fas fa-envelope"></i> <span id="email-footer">yanwix87@gmail.com</span></li>
+                        <li><i class="fab fa-whatsapp"></i> <span id="whatsapp-footer">+62 816-2472-13</span></li>
                         <li><i class="fas fa-clock"></i> <span id="hours">08:00 - 17:00 (Setiap Hari)</span></li>
                     </ul>
                 </div>
@@ -737,6 +927,26 @@
         </div>
     </footer>
 
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="modal-title">Pemesanan Berhasil!</h2>
+            <p id="modal-message">Terima kasih atas pemesanan Anda. Silakan konfirmasi pemesanan via WhatsApp untuk menyelesaikan proses.</p>
+            <a href="https://wa.me/62816247213" class="btn whatsapp-btn" id="modal-whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i> Konfirmasi via WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/62816247213" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <script>
         // Multibahasa Implementation
         const languageData = {
@@ -744,6 +954,7 @@
                 'hero-title': 'Tiket Fastboat ke Pulau Gili',
                 'hero-subtitle': 'Perjalanan cepat, aman, dan nyaman ke Gili Trawangan, Gili Meno, dan Gili Air',
                 'hero-button': 'Pesan Sekarang',
+                'whatsapp-button': 'Chat via WhatsApp',
                 'features-title': 'Mengapa Memilih Kami?',
                 'features-subtitle': 'Layanan terbaik untuk perjalanan Anda ke Pulau Gili',
                 'feature1-title': 'Perjalanan Cepat',
@@ -769,6 +980,7 @@
                 'phone-label': 'Nomor Telepon',
                 'date-label': 'Tanggal Keberangkatan',
                 'route-label': 'Rute',
+                'operator-label': 'Pilih Operator Fastboat',
                 'select-route': 'Pilih Rute',
                 'adults-label': 'Dewasa (12+ tahun)',
                 'children-label': 'Anak-anak (3-11 tahun)',
@@ -790,15 +1002,19 @@
                 'link-contact': 'Kontak Kami',
                 'footer-contact': 'Kontak Kami',
                 'address': 'Pelabuhan Padangbai, Bali',
-                'phone-footer': '+62 361 123456',
+                'phone-footer': '+62 6247213',
                 'email-footer': 'info@padangbaigilifastboat.com',
+                'whatsapp-footer': '+62 816-2472-13',
                 'hours': '08:00 - 17:00 (Setiap Hari)',
-                'copyright-text': '© 2023 Padangbai Gili Fastboat. Semua Hak Dilindungi.'
+                'copyright-text': '© 2023 Padangbai Gili Fastboat. Semua Hak Dilindungi.',
+                'modal-title': 'Pemesanan Berhasil!',
+                'modal-message': 'Terima kasih atas pemesanan Anda. Silakan konfirmasi pemesanan via WhatsApp untuk menyelesaikan proses.'
             },
             'en': {
                 'hero-title': 'Fastboat Tickets to Gili Islands',
                 'hero-subtitle': 'Fast, safe, and comfortable trips to Gili Trawangan, Gili Meno, and Gili Air',
                 'hero-button': 'Book Now',
+                'whatsapp-button': 'Chat via WhatsApp',
                 'features-title': 'Why Choose Us?',
                 'features-subtitle': 'The best service for your trip to Gili Islands',
                 'feature1-title': 'Fast Journey',
@@ -824,6 +1040,7 @@
                 'phone-label': 'Phone Number',
                 'date-label': 'Departure Date',
                 'route-label': 'Route',
+                'operator-label': 'Select Fastboat Operator',
                 'select-route': 'Select Route',
                 'adults-label': 'Adults (12+ years)',
                 'children-label': 'Children (3-11 years)',
@@ -847,8 +1064,11 @@
                 'address': 'Padangbai Harbor, Bali',
                 'phone-footer': '+62 361 123456',
                 'email-footer': 'info@padangbaigilifastboat.com',
+                'whatsapp-footer': '+62 816-2472-13',
                 'hours': '08:00 - 17:00 (Everyday)',
-                'copyright-text': '© 2023 Padangbai Gili Fastboat. All Rights Reserved.'
+                'copyright-text': '© 2023 Padangbai Gili Fastboat. All Rights Reserved.',
+                'modal-title': 'Booking Successful!',
+                'modal-message': 'Thank you for your booking. Please confirm your booking via WhatsApp to complete the process.'
             }
         };
 
@@ -910,14 +1130,54 @@
             });
         });
 
+        // Operator Selection
+        document.querySelectorAll('.operator-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.operator-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+                
+                // Set the selected operator value
+                const operator = this.getAttribute('data-operator');
+                document.getElementById('selected-operator').value = operator;
+            });
+        });
+
+        // Modal Handling
+        const modal = document.getElementById('confirmation-modal');
+        const closeModal = document.getElementById('modal-close');
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
         // Booking Form Submission
         document.getElementById('booking-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Validate operator selection
+            const selectedOperator = document.getElementById('selected-operator').value;
+            if (!selectedOperator) {
+                alert(document.querySelector('.lang-btn.active').id === 'id-lang' ?
+                    'Silakan pilih operator fastboat' : 'Please select a fastboat operator');
+                return;
+            }
+            
+            // Show confirmation modal
+            modal.style.display = 'flex';
+            
             // In a real application, this would send data to the server
-            alert(document.querySelector('.lang-btn.active').id === 'id-lang' ?
-                'Pemesanan berhasil! Silakan cek email Anda untuk detail pembayaran.' :
-                'Booking successful! Please check your email for payment details.');
+            // For now, we just show the confirmation modal
         });
     </script>
 </body>
